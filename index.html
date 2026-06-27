@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Blue & White Sliding Forms</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* SKY-BLUE & OCEAN DEEP GRADIENT BACKGROUND */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd, #0284c7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* GLOW FLASH EFFECT LAYER */
+        .glow-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            mix-blend-mode: overlay;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .glow-overlay.flash {
+            animation: flashGlow 0.8s ease-out forwards;
+        }
+
+        @keyframes flashGlow {
+            0% { opacity: 0; background: #38bdf8; filter: blur(0px); }
+            30% { opacity: 0.8; background: #ffffff; filter: blur(20px); }
+            100% { opacity: 0; background: transparent; }
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            position: relative;
+            width: 760px;
+            height: 580px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(2, 132, 199, 0.15);
+            display: flex;
+            overflow: hidden;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), 
+                        filter 0.8s ease-in-out, 
+                        opacity 0.7s ease-in-out;
+        }
+
+        .container.water-blur-exit {
+            transform: scale(1.15);
+            filter: blur(40px) brightness(1.2) contrast(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .form-container-side {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 1;
+        }
+
+        .form-box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 36px 40px;
+            box-sizing: border-box;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            color: #0369a1;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 8px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 42px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            color: #0f172a;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder { color: #94a3b8; }
+        input:focus {
+            background: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+            outline: none;
+        }
+
+        input.invalid {
+            border-color: #ef4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+        }
+
+        .field-error {
+            color: #ef4444;
+            font-size: 12px;
+            margin: -4px 0 4px 2px;
+            display: none;
+        }
+        .field-error.visible { display: block; }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 15px;
+            padding: 0;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 13px;
+            color: #0284c7;
+            text-decoration: none;
+            margin: -2px 0 6px 0;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+        }
+
+        .success-msg {
+            display: none;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #15803d;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* SOCIAL LOGINS */
+        .social-divider {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 16px 0 12px 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        .social-divider::before, .social-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #bae6fd;
+        }
+        .social-divider span { padding: 0 10px; }
+
+        .social-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .social-row-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .social-row-top .social-btn { flex: 1; }
+        .social-btn.facebook { width: 100%; }
+
+        /* THE MOVING COVER PANEL */
+        .mirror-overlay {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            box-shadow: 0 0 30px rgba(2, 132, 199, 0.3);
+            z-index: 10;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .overlay-content { transition: opacity 0.4s ease; }
+        .overlay-content h3 { font-size: 26px; margin-bottom: 15px; font-weight: 600; }
+        .overlay-content p { font-size: 14px; color: #e0f2fe; margin-bottom: 30px; line-height: 1.6; }
+
+        .ghost-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 35px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .ghost-btn:hover { background: white; color: #0284c7; transform: scale(1.05); }
+
+        /* SLIDING STATE CHANGES */
+        .container.active .mirror-overlay { transform: translateX(-100%); }
+        .container.active .form-container-side { transform: translateX(100%); }
+        .register-side { opacity: 0; pointer-events: none; transform: scale(0.9); }
+        .login-side { opacity: 1; pointer-events: all; transform: scale(1); }
+        .container.active .login-side { opacity: 0; pointer-events: none; transform: scale(0.9); }
+        .container.active .register-side { opacity: 1; pointer-events: all; transform: scale(1); }
+
+        /* ADMIN PAGE OVERLAY DESIGN */
+        .home-page {
+            position: absolute;
+            opacity: 0;
+            transform: scale(0.85);
+            filter: blur(20px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 20;
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .home-page.visible {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0px);
+        }
+
+        .home-title {
+            font-size: 64px;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            margin: 0;
+            animation: pulseGlowText 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlowText {
+            0% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 4px 10px rgba(2, 132, 199, 0.3); }
+            100% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.9), 0 4px 40px rgba(56, 189, 248, 0.7); }
+        }
+
+        .home-subtitle {
+            color: #000000;
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .countdown-display {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-overlay" id="glowLayer"></div>
+
+<div class="container" id="container">
+    <div class="form-container-side">
+        <div class="form-box login-side">
+            <h2>Welcome Back</h2>
+            <form id="login-form" style="width: 100%;" novalidate>
+                <label class="sr-only" for="login-username">Username</label>
+                <div class="input-wrapper">
+                    <input type="text" id="login-username" value="admin_test" placeholder="Username">
+                </div>
+                <div class="field-error" id="login-username-error"></div>
+
+                <label class="sr-only" for="login-password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="login-password" value="Pass123!" placeholder="Password">
+                    <button type="button" class="toggle-password" data-target="login-password"><i class="fa fa-eye"></i></button>
+                </div>
+                <div class="field-error" id="login-password-error"></div>
+
+                <a href="#" class="forgot-link">Forgot password?</a>
+                <button type="submit">Login</button>
+                <div class="success-msg" id="login-success">✓ Logged in successfully!</div>
+            </form>
+
+            <div class="social-divider"><span>or login with</span></div>
+            <div class="social-container">
+                <div class="social-row-top">
+                    <button type="button" class="social-btn"><i class="fab fa-google"></i> Google</button>
+                    <button type="button" class="social-btn"><i class="fab fa-github"></i> GitHub</button>
+                </div>
+                <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+            </div>
+        </div>
+
+        <div class="form-box register-side">
+            <h2>Create Account</h2>
+            <form id="register-form" style="width: 100%;" novalidate>
+                <label class="sr-only" for="reg-username">Username</label>
+                <div class="input-wrapper">
+                    <input type="text" id="reg-username" value="new_user_test" placeholder="Username">
+                </div>
+                <div class="field-error" id="reg-username-error"></div>
+
+                <label class="sr-only" for="reg-email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="reg-email" value="test@example.com" placeholder="Email Address">
+                </div>
+                <div class="field-error" id="reg-email-error"></div>
+
+                <label class="sr-only" for="reg-password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="reg-password" value="Secure789!" placeholder="Password">
+                    <button type="button" class="toggle-password" data-target="reg-password"><i class="fa fa-eye"></i></button>
+                </div>
+                <div class="field-error" id="reg-password-error"></div>
+
+                <button type="submit">Register</button>
+                <div class="success-msg" id="register-success">✓ Account created successfully!</div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mirror-overlay" id="mirrorOverlay">
+        <div class="overlay-content" id="overlay-left-text">
+            <h3>New Here?</h3>
+            <p>Enter your details and start your journey with us today.</p>
+            <button class="ghost-btn" id="to-register-btn">Register</button>
+        </div>
+        <div class="overlay-content" id="overlay-right-text" style="display: none; opacity: 0;">
+            <h3>Welcome Back!</h3>
+            <p>To keep connected with us please login with your personal info.</p>
+            <button class="ghost-btn" id="to-login-btn">Login</button>
+        </div>
+    </div>
+</div>
+
+<div class="home-page" id="homePage">
+    <h1 class="home-title">Hey Admin !</h1>
+    <p class="home-subtitle">System initialized. Welcome to your main command module.</p>
+    <div class="countdown-display" id="countdownBox">Redirecting in 4s...</div>
+</div>
+
+<script>
+    const container = document.getElementById('container');
+    const toRegisterBtn = document.getElementById('to-register-btn');
+    const toLoginBtn = document.getElementById('to-login-btn');
+    const leftText = document.getElementById('overlay-left-text');
+    const rightText = document.getElementById('overlay-right-text');
+    const glowLayer = document.getElementById('glowLayer');
+    const homePage = document.getElementById('homePage');
+    const countdownBox = document.getElementById('countdownBox');
+
+    // Panel Toggle Logic
+    toRegisterBtn.addEventListener('click', () => {
+        container.classList.add('active');
+        leftText.style.opacity = '0';
+        setTimeout(() => {
+            leftText.style.display = 'none';
+            rightText.style.display = 'block';
+            setTimeout(() => rightText.style.opacity = '1', 50);
+        }, 250);
+    });
+
+    toLoginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+        rightText.style.opacity = '0';
+        setTimeout(() => {
+            rightText.style.display = 'none';
+            leftText.style.display = 'block';
+            setTimeout(() => leftText.style.opacity = '1', 50);
+        }, 250);
+    });
+
+    // Password Visiblity Toggles
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        });
+    });
+
+    // 4 Second Countdown to home.html File
+    function startAdminCountdown() {
+        let timeLeft = 4;
+        const interval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                countdownBox.textContent = `Redirecting in ${timeLeft}s...`;
+            } else {
+                clearInterval(interval);
+                // REDIRECT TO HOME.HTML FILE
+                window.location.href = "home.html";
+            }
+        }, 1000);
+    }
+
+    function runWaterGlowTransition() {
+        container.classList.add('water-blur-exit');
+        setTimeout(() => glowLayer.classList.add('flash'), 200);
+        setTimeout(() => {
+            container.style.display = 'none';
+            homePage.style.display = 'flex';
+            setTimeout(() => {
+                homePage.classList.add('visible');
+                startAdminCountdown();
+            }, 50);
+        }, 600);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('login-success').style.display = 'block';
+        setTimeout(runWaterGlowTransition, 400);
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('register-success').style.display = 'block';
+        setTimeout(runWaterGlowTransition, 400);
+    });
+</script>
+</body>
+</html>

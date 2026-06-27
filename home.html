@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Questionnaire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* FULL SEAMLESS BLURRY SKY-BLUE & WHITE BACKDROP */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            background: #e0f2fe;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, #bae6fd 0%, transparent 60%),
+                        radial-gradient(circle at 40% 80%, #f0f9ff 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #38bdf8 0%, transparent 40%);
+            filter: blur(80px) saturate(120%);
+            z-index: -1;
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .question-card {
+            width: 100%;
+            max-width: 600px;
+            padding: 50px 40px;
+            box-sizing: border-box;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(2, 132, 199, 0.1);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 12.5%;
+            background: linear-gradient(90deg, #38bdf8, #0284c7);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* GLOWING TEXT STYLING */
+        .glow-question-text {
+            color: #0369a1;
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 35px;
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 
+                         0 0 30px rgba(56, 189, 248, 0.4);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .question-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 35px;
+        }
+
+        .question-input {
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            box-sizing: border-box;
+            color: #0f172a;
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .question-input:focus {
+            background: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+            outline: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .question-btn {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .question-btn:hover { transform: translateY(-2px); }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.4);
+            color: #0369a1;
+            border: 1px solid rgba(2, 132, 199, 0.2);
+            box-shadow: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* SUMMARY REVIEW SCREEN STYLING */
+        .summary-container {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            max-height: 240px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .summary-item {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #334155;
+            border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            color: #0369a1;
+            display: inline-block;
+            width: 140px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="question-card">
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <div class="glow-question-text" id="questionText">What is your first name?</div>
+    
+    <div class="question-input-wrapper">
+        <input type="text" class="question-input" id="questionInput" placeholder="Type your answer here..." autocomplete="off">
+    </div>
+
+    <div class="btn-container">
+        <button type="button" class="question-btn back-btn" id="backQuestionBtn" style="display: none;"><i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back</button>
+        <button type="button" class="question-btn" id="nextQuestionBtn">Next <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { key: "first_name", text: "What is your first name?", placeholder: "e.g Mohsin...", type: "text" },
+        { key: "last_name", text: "What is your last name?", placeholder: "e.g. Muhammad...", type: "text" },
+        { key: "age", text: "How old are you?", placeholder: "e.g. 24", type: "number" },
+        { key: "school", text: "What school did you attend?", placeholder: "Your school name...", type: "text" },
+        { key: "college", text: "What college did you attend?", placeholder: "Your college name...", type: "text" },
+        { key: "university", text: "What university did you attend?", placeholder: "Your university name...", type: "text" },
+        { key: "grade", text: "What year or grade are you in?", placeholder: "e.g. 2nd Year, Graduate...", type: "text" },
+        { key: "hobbies", text: "What are your hobbies?", placeholder: "e.g. Coding, Gaming, Music...", type: "text" }
+    ];
+
+    let currentIdx = 0;
+    let isReviewScreen = false;
+    let collectedData = JSON.parse(localStorage.getItem('questionnaire_data')) || {};
+
+    const qText = document.getElementById('questionText');
+    const qInput = document.getElementById('questionInput');
+    const nextBtn = document.getElementById('nextQuestionBtn');
+    const backBtn = document.getElementById('backQuestionBtn');
+    const progressBar = document.getElementById('progressBar');
+
+    // Restore step sequence if saved data exists
+    if (Object.keys(collectedData).length > 0) {
+        for (let i = 0; i < questions.length; i++) {
+            if (collectedData[questions[i].key]) {
+                currentIdx = i + 1;
+            } else {
+                currentIdx = i;
+                break;
+            }
+        }
+        if (currentIdx >= questions.length) {
+            currentIdx = questions.length - 1;
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        updateQuestion();
+    });
+
+    function updateQuestion() {
+        isReviewScreen = false;
+        qInput.style.display = 'block';
+
+        if (currentIdx < questions.length) {
+            const progressPercent = ((currentIdx + 1) / questions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            // Back button display rule
+            backBtn.style.display = currentIdx > 0 ? 'inline-block' : 'none';
+
+            qText.style.opacity = '0';
+            qText.style.transform = 'translateY(-10px)';
+            
+            setTimeout(() => {
+                qText.textContent = questions[currentIdx].text;
+                qInput.placeholder = questions[currentIdx].placeholder;
+                qInput.value = collectedData[questions[currentIdx].key] || "";
+                
+                qText.style.opacity = '1';
+                qText.style.transform = 'translateY(0)';
+                qInput.focus();
+                
+                if (currentIdx === questions.length - 1) {
+                    nextBtn.innerHTML = 'Review <i class="fas fa-eye" style="margin-left: 8px;"></i>';
+                } else {
+                    nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>';
+                }
+            }, 250);
+        } else {
+            showReviewScreen();
+        }
+    }
+
+    function showReviewScreen() {
+        isReviewScreen = true;
+        progressBar.style.width = '95%';
+        backBtn.style.display = 'inline-block';
+        qInput.style.display = 'none';
+
+        qText.style.opacity = '0';
+        setTimeout(() => {
+            qText.innerHTML = "Review Your Profile";
+            
+            // Generate review summary items
+            let summaryHtml = '<div class="summary-container">';
+            questions.forEach(q => {
+                const labelArr = q.text.replace('What is your ', '').replace('What ', '').replace('How old are you?', 'Age').replace(' did you attend?', '').split(' ');
+                const cleanLabel = labelArr[0].charAt(0).toUpperCase() + labelArr[0].slice(1);
+                summaryHtml += `
+                    <div class="summary-item">
+                        <span class="summary-label">${cleanLabel}:</span> ${collectedData[q.key]}
+                    </div>`;
+            });
+            summaryHtml += '</div>';
+
+            qInput.insertAdjacentHTML('afterend', summaryHtml);
+            nextBtn.innerHTML = 'Submit <i class="fas fa-check" style="margin-left: 8px;"></i>';
+            qText.style.opacity = '1';
+        }, 250);
+    }
+
+    function removeSummaryContainer() {
+        const container = document.querySelector('.summary-container');
+        if (container) container.remove();
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (isReviewScreen) {
+            removeSummaryContainer();
+            progressBar.style.width = '100%';
+            qText.innerHTML = "Setup Complete! <br><span style='font-size: 22px; font-weight: normal; color: #0284c7;'>Your profile has been saved.</span>";
+            nextBtn.style.display = 'none';
+            backBtn.style.display = 'none';
+            
+            localStorage.removeItem('questionnaire_data'); // Clear on completion
+            console.log("Collected Data: ", collectedData);
+            return;
+        }
+
+        const value = qInput.value.trim();
+
+        // Validation rule validation
+        if (!value || (questions[currentIdx].type === 'number' && isNaN(value))) {
+            qInput.style.borderColor = "#ef4444";
+            setTimeout(() => qInput.style.borderColor = "rgba(255, 255, 255, 0.7)", 500);
+            return;
+        }
+
+        collectedData[questions[currentIdx].key] = value;
+        localStorage.setItem('questionnaire_data', JSON.stringify(collectedData));
+
+        currentIdx++;
+        updateQuestion();
+    });
+
+    backBtn.addEventListener('click', () => {
+        if (isReviewScreen) {
+            removeSummaryContainer();
+            currentIdx = questions.length - 1;
+            updateQuestion();
+        } else if (currentIdx > 0) {
+            currentIdx--;
+            updateQuestion();
+        }
+    });
+
+    qInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') nextBtn.click();
+    });
+</script>
+</body>
+</html>
